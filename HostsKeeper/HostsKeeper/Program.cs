@@ -13,30 +13,69 @@ namespace HostsKeeper
     internal static class Program
     {
         private const string HOSTS = "C:\\Windows\\System32\\drivers\\etc\\hosts";
-        private static readonly string LOCATION = Assembly.GetCallingAssembly().Location;
         private static readonly int PID = Process.GetCurrentProcess().Id;
 
-        private static void KeepHosts(int hostsKeeperKeeperPid = 0)
+
+        private static void Cooldown()
+        {
+            Thread.Sleep(1);
+        }
+
+
+        private static string NewProgramLocation()
+        {
+            if (!File.Exists("HostsKeeper.exe"))
+            {
+                throw new FileNotFoundException();
+            }
+
+            string[] files = Directory.GetFiles(".", "*.exe");
+            foreach (var file in files)
+            {
+                if (Path.GetFileNameWithoutExtension(file) == "HostsKeeper")
+                {
+                    continue;
+                }
+
+                try
+                {
+                    File.Delete(file);
+                }
+                catch (System.UnauthorizedAccessException)
+                {
+                }
+            }
+
+            string destFileName = Guid.NewGuid().ToString() + ".exe";
+            File.Copy("HostsKeeper.exe", destFileName);
+            
+            return destFileName;
+        }
+
+
+        private static void KeepHosts(Process hostsKeeperKeeper = null)
         {
             new Thread(() =>
             {
-                Process hostsKeeperKeeper;
-                if (hostsKeeperKeeperPid > 0)
+                try
                 {
-                    hostsKeeperKeeper = Process.GetProcessById(hostsKeeperKeeperPid);
+                    while (true)
+                    {
+                        if(hostsKeeperKeeper is null)
+                        {
+                            string newProgramLocation = NewProgramLocation();
+                            hostsKeeperKeeper = Process.Start(newProgramLocation, PID.ToString());
+                        }
+                        hostsKeeperKeeper.WaitForExit();
+                        hostsKeeperKeeper.Dispose();
+                        hostsKeeperKeeper = null;
+                        Cooldown();
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    hostsKeeperKeeper = Process.Start(LOCATION, PID.ToString());
+                    Console.WriteLine("catched thread exception: " + ex);
                 }
-
-                while (true)
-                {
-                    hostsKeeperKeeper.WaitForExit();
-                    Thread.Sleep(1000);
-                    hostsKeeperKeeper = Process.Start(LOCATION, PID.ToString());
-                }
-
             }).Start();
 
             string hosts = File.ReadAllText(HOSTS);
@@ -63,7 +102,7 @@ namespace HostsKeeper
                         break;
                 }
 
-                Thread.Sleep(1000);
+                Cooldown();
 
             }
         }
@@ -74,8 +113,11 @@ namespace HostsKeeper
             while (true)
             {
                 process.WaitForExit();
-                Thread.Sleep(1000);
-                process = Process.Start(LOCATION, "a" + PID);
+                process.Dispose();
+                process = null;
+                Cooldown();
+                string newProgramLocation = NewProgramLocation();
+                process = Process.Start(newProgramLocation, "a" + PID);
             }
         }
 
@@ -95,8 +137,9 @@ namespace HostsKeeper
                     string arg0 = args[0];
                     if (arg0[0] == 'a')
                     {
-                        int hostsKeeperKeeperPid = int.Parse(arg0.Substring(1));
-                        KeepHosts(hostsKeeperKeeperPid);
+                        int processId = int.Parse(arg0.Substring(1));
+                        Process process = Process.GetProcessById(processId);
+                        KeepHosts(process);
                     }
                     else
                     {
@@ -108,11 +151,11 @@ namespace HostsKeeper
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine("catched exception: " + ex);
             }
 
             Console.WriteLine("Program is terminating...");
-            Thread.Sleep(1000);
+            Thread.Sleep(10000);
         }
 
     }
