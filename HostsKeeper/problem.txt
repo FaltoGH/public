@@ -18,10 +18,8 @@ HostsKeeper.exe 프로세스를 종료하면 hosts 파일을 자유롭게 수정
 
 4.
 HostsKeeper.exe를 작업 표시줄에서 우클릭한 후 "모든 창 닫기"를 누르면 프로세스가 모두 종료된다.
-C# 프로젝트 Output type을 Console Application에서 Window Application으로 바꿈으로써
+C# 프로젝트 Output type을 Console Application에서 Windows Application으로 바꿈으로써
 프로그램이 작업 표시줄에 노출되지 않게 했다.
-5에서 랜덤 파일명을 사용하기 때문에 "모든 창 닫기"를 누를 수 없게 되었다.
-따라서 다시 Console Application으로 원상 복구했다.
 
 
 
@@ -29,6 +27,15 @@ C# 프로젝트 Output type을 Console Application에서 Window Application으�
 5.
 관리자 명령 프롬프트를 실행한 후 taskkill /F /IM HostsKeeper.exe 을 입력하면 프로세스가 모두 종료된다.
 HostsKeeper.exe를 랜덤 파일명으로 복사한 후 실행시켜 이미지 이름을 특정할 수 없게 했다.
+
+
+
+
+6.
+관리자 명령 프롬프트를 실행한 후 tasklist 로 프로세스 이름을 확인하고
+taskkill /im ab3b91d6* /im 68ef2eb6* 등의 명령어를 이용하여
+두 프로세스를 모두 종료시킬 수 있다.
+사실상 프로세스 이름 랜덤하게 바꾼 게 의미가 없어졌다.
 
 
 

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,27 +33,26 @@ namespace HostsKeeper
                 throw new FileNotFoundException();
             }
 
-            string[] files = Directory.GetFiles(".", "*.exe");
-            foreach (var file in files)
-            {
-                if (Path.GetFileNameWithoutExtension(file) == "HostsKeeper")
-                {
-                    continue;
-                }
+            return "HostsKeeper.exe";
 
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (System.UnauthorizedAccessException)
-                {
-                }
-            }
-
-            string destFileName = Guid.NewGuid().ToString() + ".exe";
-            File.Copy("HostsKeeper.exe", destFileName);
-            
-            return destFileName;
+            //string[] files = Directory.GetFiles(".", "*.exe");
+            //foreach (var file in files)
+            //{
+            //    if (Path.GetFileNameWithoutExtension(file) == "HostsKeeper")
+            //    {
+            //        continue;
+            //    }
+            //    try
+            //    {
+            //        File.Delete(file);
+            //    }
+            //    catch (System.UnauthorizedAccessException)
+            //    {
+            //    }
+            //}
+            //string destFileName = Guid.NewGuid().ToString() + ".exe";
+            //File.Copy("HostsKeeper.exe", destFileName);
+            //return destFileName;
         }
 
 
@@ -120,6 +123,7 @@ namespace HostsKeeper
                 process = Process.Start(newProgramLocation, "a" + PID);
             }
         }
+
 
         private static void Main(string[] args)
         {
