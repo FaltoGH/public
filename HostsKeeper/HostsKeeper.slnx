@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="FileWatch/FileWatch.csproj" Id="ee16a049-98a4-4a10-896f-586d47ae6a99" />
   <Project Path="Hooks/Hooks.csproj" Id="05f07a00-929c-4a0f-bba6-fde82e7bbaca" />
   <Project Path="HostsKeeper/HostsKeeper.csproj" Id="3c4d5ad7-d71d-45d1-93e6-da70834eac29" />
 </Solution>

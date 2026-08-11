@@ -16,72 +16,44 @@ namespace HostsKeeper
 {
     internal static class Program
     {
-        private const string HOSTS = "C:\\Windows\\System32\\drivers\\etc\\hosts";
-        private static readonly int PID = Process.GetCurrentProcess().Id;
-
+        private const bool START_NEW_PROCESS = true;
 
         private static void Cooldown()
         {
-            Thread.Sleep(1);
-        }
-
-
-        private static string NewProgramLocation()
-        {
-            if (!File.Exists("HostsKeeper.exe"))
-            {
-                throw new FileNotFoundException();
-            }
-
-            return "HostsKeeper.exe";
-
-            //string[] files = Directory.GetFiles(".", "*.exe");
-            //foreach (var file in files)
-            //{
-            //    if (Path.GetFileNameWithoutExtension(file) == "HostsKeeper")
-            //    {
-            //        continue;
-            //    }
-            //    try
-            //    {
-            //        File.Delete(file);
-            //    }
-            //    catch (System.UnauthorizedAccessException)
-            //    {
-            //    }
-            //}
-            //string destFileName = Guid.NewGuid().ToString() + ".exe";
-            //File.Copy("HostsKeeper.exe", destFileName);
-            //return destFileName;
+            Thread.Sleep(3333);
         }
 
 
         private static void KeepHosts(Process hostsKeeperKeeper = null)
         {
-            new Thread(() =>
+            if (START_NEW_PROCESS)
             {
-                try
+                new Thread(() =>
                 {
-                    while (true)
+                    try
                     {
-                        if(hostsKeeperKeeper is null)
+                        while (true)
                         {
-                            string newProgramLocation = NewProgramLocation();
-                            hostsKeeperKeeper = Process.Start(newProgramLocation, PID.ToString());
+                            if (hostsKeeperKeeper is null)
+                            {
+                                Console.WriteLine("Starting " + Assembly.GetExecutingAssembly().Location);
+                                hostsKeeperKeeper = Process.Start(
+    Assembly.GetExecutingAssembly().Location, Process.GetCurrentProcess().Id.ToString());
+                            }
+                            hostsKeeperKeeper.WaitForExit();
+                            hostsKeeperKeeper.Dispose();
+                            hostsKeeperKeeper = null;
+                            Cooldown();
                         }
-                        hostsKeeperKeeper.WaitForExit();
-                        hostsKeeperKeeper.Dispose();
-                        hostsKeeperKeeper = null;
-                        Cooldown();
                     }
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine("catched thread exception: " + ex);
-                }
-            }).Start();
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("catched thread exception: " + ex);
+                    }
+                }).Start();
+            }
 
-            string hosts = File.ReadAllText(HOSTS);
+            string hosts = File.ReadAllText("C:\\Windows\\System32\\drivers\\etc\\hosts");
 
             FileSystemWatcher fileSystemWatcher = new FileSystemWatcher("C:\\Windows\\System32\\drivers\\etc\\");
 
@@ -100,7 +72,7 @@ namespace HostsKeeper
                             {
                                 process.Kill();
                             }
-                            File.WriteAllText(HOSTS, hosts);
+                            File.WriteAllText("C:\\Windows\\System32\\drivers\\etc\\hosts", hosts);
                         }
                         break;
                 }
@@ -119,8 +91,8 @@ namespace HostsKeeper
                 process.Dispose();
                 process = null;
                 Cooldown();
-                string newProgramLocation = NewProgramLocation();
-                process = Process.Start(newProgramLocation, "a" + PID);
+                process = Process.Start(
+Assembly.GetExecutingAssembly().Location, "a" + Process.GetCurrentProcess().Id);
             }
         }
 
@@ -129,7 +101,8 @@ namespace HostsKeeper
         {
             try
             {
-                Console.WriteLine($"Program is starting... pid={PID} args=[{string.Join(", ", args)}]");
+                Console.WriteLine(
+$"Program is starting... pid={Process.GetCurrentProcess().Id} args=[{string.Join(", ", args)}]");
                 Thread.Sleep(1000);
 
                 if (args.Length == 0)
