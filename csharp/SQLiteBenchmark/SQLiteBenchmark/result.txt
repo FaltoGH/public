@@ -1,0 +1,57 @@
+First write: 2026-08-14 Fri 13:32
+
+
+
+
+하나씩 INSERT하고 파일을 변경하는 것보다 BEGIN; END;를 이용하여
+atomic transaction으로 한꺼번에 INSERT하는 것이
+압도적으로 효율적이다.
+
+
+
+
+Benchmark1001과 Benchmark1002의 비교:
+10000개의 데이터를 100개의 각 테이블에 100개의 행으로 저장하는 것은
+1245ms가 걸렸고, 파일 크기는 839680바이트였다.
+10000개의 데이터를 1개의 테이블에 10000개의 행으로 저장하는 것은
+633ms가 걸렸고, 파일 크기는 393216바이트였다.
+여러 번 실험해도, 실험 순서를 바꾸어도 우열은 뚜렷했다.
+또한 파일 크기는 몇 번을 반복하여 실험해도 일정했다.
+테이블 여러 개를 만드는 것보다 하나의 테이블에 데이터를 다 넣는 것이
+더 효율적이다.
+
+
+
+
+Benchmark1002과 Benchmark1003의 비교:
+BEGIN; END;를 이용하여
+하나하나의 INSERT INTO table VALUES 명령을
+atomic transaction으로 보내는 것은
+4번했더니 평균 612ms가 걸렸다.
+BEGIN; END;를 이용하지 않고 VALUES (...) (...) (...) ... 식으로
+문자열을 VALUES 뒤에 이어붙여서 한 번에 INSERT하는 것은
+4번했더니 평균 582ms가 걸렸고, 파일 크기는 동일했다.
+atomic transaction보다 문자열 이어붙이기 후 INSERT 하는 것이 조금 더 효율적인
+것 같다.
+
+
+
+
+Benchmark1003과 Benchmark1004의 비교:
+StringBuilder를 이용하는 것과 lis.Select 후 string.Join을 이용하는 것 사이에
+큰 차이는 나지 않는 것 같다.
+lis.Select 후 string.Join 이용은 4번했더니 평균 593.25ms가 걸렸고,
+파일 크기는 동일했다.
+StringBuilder 이용하는 것이 약간 더 빨라보인다.
+
+
+
+
+결론:
+- 테이블은 많이 만들지 말 것.
+- 많은 행을 INSERT할 시엔 StringBuilder를 이용하여 VALUES 뒤에 문자열을 이어붙여
+  한 번에 INSERT할 것.
+
+
+
+
