@@ -46,7 +46,7 @@ namespace FileWatch
                         FormUrlEncodedContent formUrlEncodedContent = new FormUrlEncodedContent(values);
                         HttpResponseMessage httpResponseMessage = httpClient.PostAsync(requestUri, formUrlEncodedContent).Result;
                         string responseString = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                        stopwatch.Reset();
+                        stopwatch.Restart();
                     }
 
                     Thread.Sleep(1);
