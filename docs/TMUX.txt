@@ -1,0 +1,122 @@
+DEFAULT KEY BINDINGS
+       tmux may be controlled from an attached client by using a key combination of a prefix key, ‘C-b’ (Ctrl-b) by default, followed by a command key.
+
+       The default command key bindings are:
+
+             C-b         Send the prefix key (C-b) through to the application.
+             C-o         Rotate the panes in the current window forwards.
+             C-z         Suspend the tmux client.
+             !           Break the current pane out of the window.
+             "           Split the current pane into two, top and bottom.
+             #           List all paste buffers.
+             $           Rename the current session.
+             %           Split the current pane into two, left and right.
+             &           Kill the current window.
+             '           Prompt for a window index to select.
+             (           Switch the attached client to the previous session.
+             )           Switch the attached client to the next session.
+             ,           Rename the current window.
+             -           Delete the most recently copied buffer of text.
+             .           Prompt for an index to move the current window.
+             0 to 9      Select windows 0 to 9.
+             :           Enter the tmux command prompt.
+             ;           Move to the previously active pane.
+             =           Choose which buffer to paste interactively from a list.
+             ?           List all key bindings.
+             D           Choose a client to detach.
+             L           Switch the attached client back to the last session.
+             [           Enter copy mode to copy text or view the history.
+             ]           Paste the most recently copied buffer of text.
+             c           Create a new window.
+             d           Detach the current client.
+             f           Prompt to search for text in open windows.
+             i           Display some information about the current window.
+             l           Move to the previously selected window.
+             m           Mark the current pane (see select-pane -m).
+             M           Clear the marked pane.
+             n           Change to the next window.
+             o           Select the next pane in the current window.
+             p           Change to the previous window.
+             q           Briefly display pane indexes.
+             r           Force redraw of the attached client.
+             s           Select a new session for the attached client interactively.
+             t           Show the time.
+             w           Choose the current window interactively.
+             x           Kill the current pane.
+             z           Toggle zoom state of the current pane.
+             {           Swap the current pane with the previous pane.
+             }           Swap the current pane with the next pane.
+             ~           Show previous messages from tmux, if any.
+             Page Up     Enter copy mode and scroll one page up.
+             Up, Down
+             Left, Right
+                         Change to the pane above, below, to the left, or to the right of the current pane.
+             M-1 to M-5  Arrange panes in one of the five preset layouts: even-horizontal, even-vertical, main-horizontal, main-vertical, or tiled.
+             Space       Arrange the current window in the next preset layout.
+             M-n         Move to the next window with a bell or activity marker.
+             M-o         Rotate the panes in the current window backwards.
+             M-p         Move to the previous window with a bell or activity marker.
+             C-Up, C-Down
+             C-Left, C-Right
+                         Resize the current pane in steps of one cell.
+             M-Up, M-Down
+             M-Left, M-Right
+                         Resize the current pane in steps of five cells.
+
+       Key bindings may be changed with the bind-key and unbind-key commands.
+
+       list-sessions [-F format] [-f filter]
+                     (alias: ls)
+               List all sessions managed by the server.
+
+       kill-session [-aC] [-t target-session]
+              Destroy the given session, closing any windows linked to it and no other sessions, and detaching all clients attached to it.  If -a is given, all sessions but the specified one is killed.   The  -C  flag  clears  alerts
+              (bell, activity, or silence) in all windows linked to the session.
+
+       rename-session [-t target-session] new-name
+                     (alias: rename)
+               Rename the session to new-name.
+
+       attach-session [-dErx] [-c working-directory] [-f flags] [-t target-session]
+                     (alias: attach)
+               If  run from outside tmux, create a new client in the current terminal and attach it to target-session.  If used from inside, switch the current client.  If -d is specified, any other clients attached to the session are
+               detached.  If -x is given, send SIGHUP to the parent process of the client as well as detaching the client, typically causing it to exit.  -f sets a comma-separated list of client flags.  The flags are:
+
+               active-pane
+                       the client has an independent active pane
+
+               ignore-size
+                       the client does not affect the size of other clients
+
+               no-output
+                       the client does not receive pane output in control mode
+
+               pause-after=seconds
+                       output is paused once the pane is seconds behind in control mode
+
+               read-only
+                       the client is read-only
+
+               wait-exit
+                       wait for an empty line input before exiting in control mode
+
+               A leading ‘!’ turns a flag off if the client is already attached.  -r is an alias for -f read-only,ignore-size.  When a client is read-only, only keys bound to the detach-client or switch-client commands  have  any  ef‐
+               fect.  A client with the active-pane flag allows the active pane to be selected independently of the window's active pane used by clients without the flag.  This only affects the cursor position and commands issued from
+               the client; other features such as hooks and styles continue to use the window's active pane.
+
+               If no server is started, attach-session will attempt to start it; this will fail unless sessions are created in the configuration file.
+
+               The target-session rules for attach-session are slightly adjusted: if tmux needs to select the most recently used session, it will prefer the most recently used unattached session.
+
+               -c will set the session working directory (used for new windows) to working-directory.
+
+               If -E is used, the update-environment option will not be applied.
+
+       new-session [-AdDEPX] [-c start-directory] [-e environment] [-f flags] [-F format] [-n window-name] [-s session-name] [-t group-name] [-x width] [-y height] [shell-command]
+                     (alias: new)
+               Create a new session with name session-name.
+
+
+
+
+end of document.

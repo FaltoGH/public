@@ -48,9 +48,11 @@ StringBuilder 이용하는 것이 약간 더 빨라보인다.
 
 
 결론:
-- 테이블은 많이 만들지 말 것.
-- 많은 행을 INSERT할 시엔 StringBuilder를 이용하여 VALUES 뒤에 문자열을 이어붙여
-  한 번에 INSERT할 것.
+ - 테이블은 많이 만들지 말 것.
+ - 많은 행을 INSERT할 시엔 StringBuilder를 이용하여 VALUES 뒤에 문자열을 이어붙여
+   한 번에 INSERT할 것.
+ - https://stackoverflow.com/questions/585860/string-join-vs-stringbuilder-which-is-faster
+   에 따르면 StringBuilder나 string.Join이나 큰 속도 차이는 없다.
 
 
 
