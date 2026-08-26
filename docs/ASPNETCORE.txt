@@ -1,0 +1,2 @@
+ASP.NET Core change port number
+YourApplicationName.exe --urls http://localhost:12345

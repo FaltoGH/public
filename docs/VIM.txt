@@ -1,0 +1,4 @@
+v: visual
+y: copy
+d: cut
+p: paste

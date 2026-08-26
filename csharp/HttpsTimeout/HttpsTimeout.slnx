@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="HttpEcho/HttpEcho.csproj" Id="1b4ece6c-66ca-497c-b5ff-ed8dabe3a51e" />
   <Project Path="HttpsTimeout/HttpsTimeout.csproj" />
+  <Project Path="HttpEcho/HttpEcho.csproj" Id="1b4ece6c-66ca-497c-b5ff-ed8dabe3a51e" />
 </Solution>

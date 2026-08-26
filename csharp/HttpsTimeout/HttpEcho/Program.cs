@@ -10,22 +10,31 @@ namespace HttpEcho
         {
             try
             {
-                var ipEndPoint = new IPEndPoint(IPAddress.Any, 80);
-                var listener = new TcpListener(ipEndPoint);
+                int port;
+                
+                if (args.Length < 1)
+                {
+                    port = 3000;
+                }
+                else
+                {
+                    port = int.Parse(args[0]);
+                }
+
+                var listener = new HttpListener();
+                listener.Prefixes.Add($"http://localhost:{port}/");
                 listener.Start();
-                var stdout = Console.OpenStandardOutput();
+                Console.WriteLine($"Now listening on port number {port}");
+
+                //var stdout = Console.OpenStandardOutput();
+                //byte[] buffer = new byte[1024];
+
                 while (true)
                 {
-                    var tcpClient = await listener.AcceptTcpClientAsync();
-                    var networkStream = tcpClient.GetStream();
-                    byte[] buffer = new byte[1024];
-                    int count = 1;
-                    while(count > 0)
-                    {
-                        count = networkStream.Read(buffer, 0, buffer.Length);
-                        stdout.Write(buffer, 0, count);
-                        Thread.Sleep(1);
-                    }
+                    var ctx = listener.GetContext();
+                    var resp = ctx.Response;
+                    resp.StatusCode = (int)HttpStatusCode.OK;
+                    resp.StatusDescription = "Status OK";
                     Thread.Sleep(1);
                 }
             }
