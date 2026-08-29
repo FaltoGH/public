@@ -1,0 +1,47 @@
+Windows Registry Editor Version 5.00
+; This is a comment. This can be placed in any part of a .reg file
+[HKEY_CLASSES_ROOT\*\shell\custom_notepad]
+@="Edit with notepad"
+"Icon"="C:\\Windows\\System32\\notepad.exe"
+[HKEY_CLASSES_ROOT\*\shell\custom_notepad\command]
+@="C:\\Windows\\System32\\notepad.exe %1"
+[HKEY_CLASSES_ROOT\*\shell\custom_copypath]
+@="Copy file path"
+[HKEY_CLASSES_ROOT\*\shell\custom_copypath\command]
+@="C:\\Windows\\System32\\cmd.exe /c \"echo %1 | clip\""
+[HKEY_CLASSES_ROOT\*\shell\custom_vscode]
+@="Edit with VS code"
+"Icon"="C:\\Users\\nasoo\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe,0"
+[HKEY_CLASSES_ROOT\*\shell\custom_vscode\command]
+@="\"C:\\Users\\nasoo\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" \"%1\""
+[HKEY_CLASSES_ROOT\*\shell\custom_sha256]
+@="Compute SHA256"
+[HKEY_CLASSES_ROOT\*\shell\custom_sha256\command]
+@="C:\\Windows\\System32\\cmd.exe /s /c \"certutil -hashfile \"%1\" sha256 & pause\""
+[HKEY_CLASSES_ROOT\*\shell\custom_sign]
+@="Sign with Morangs cert"
+[HKEY_CLASSES_ROOT\*\shell\custom_sign\command]
+@="C:\\Windows\\System32\\cmd.exe /k \"\"C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.20348.0\\x86\\signtool.exe\" sign /a /s my /n \"Morangs Inc.\" /tr http://timestamp.digicert.com /td sha256 /fd sha256 /v \"%1\"\""
+
+[HKEY_CLASSES_ROOT\Directory\shell\custom_cmdhere]
+@="Open cmd here"
+"Icon"="C:\\Windows\\System32\\cmd.exe"
+[HKEY_CLASSES_ROOT\Directory\shell\custom_cmdhere\command]
+@="C:\\Windows\\System32\\cmd.exe /s /k pushd \"%V\""
+[HKEY_CLASSES_ROOT\Directory\Background\shell\custom_cmdhere]
+@="Open cmd here"
+"Icon"="C:\\Windows\\System32\\cmd.exe"
+[HKEY_CLASSES_ROOT\Directory\Background\shell\custom_cmdhere\command]
+@="C:\\Windows\\System32\\cmd.exe /s /k pushd \"%V\""
+
+[HKEY_CLASSES_ROOT\Directory\shell\custom_elevatedcmd]
+@="Open cmd here(admin)"
+"Icon"="C:\\Windows\\System32\\cmd.exe"
+[HKEY_CLASSES_ROOT\Directory\shell\custom_elevatedcmd\command]
+@="PowerShell -windowstyle hidden -Command \"Start-Process cmd.exe -ArgumentList '/s,/k,pushd,%V' -Verb RunAs\""
+[HKEY_CLASSES_ROOT\Directory\Background\shell\custom_elevatedcmd]
+@="Open cmd here(admin)"
+"Icon"="C:\\Windows\\System32\\cmd.exe"
+[HKEY_CLASSES_ROOT\Directory\Background\shell\custom_elevatedcmd\command]
+@="PowerShell -windowstyle hidden -Command \"Start-Process cmd.exe -ArgumentList '/s,/k,pushd,%V' -Verb RunAs\""
+

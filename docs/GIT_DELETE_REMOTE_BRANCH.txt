@@ -1,0 +1,37 @@
+https://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-locally-and-remotely
+
+Executive Summary
+git push -d <remote_name> <branchname>   # Delete remote
+git branch -d <branchname>               # Delete local
+Note: In most cases, <remote_name> will be origin.
+
+Delete Local Branch
+To delete the local branch, use one of the following:
+
+git branch -d <branch_name>
+git branch -D <branch_name>
+The -d option is an alias for --delete, which only deletes the branch if it has already been fully merged in its upstream branch.
+The -D option is an alias for --delete --force, which deletes the branch "irrespective of its merged status." [Source: man git-branch]
+As of Git v2.3, git branch -d (delete) learned to honor the -f (force) flag.
+You will receive an error if you try to delete the currently selected branch.
+Delete Remote Branch
+As of Git v1.7.0, you can delete a remote branch using
+
+$ git push <remote_name> --delete <branch_name>
+which might be easier to remember than
+
+$ git push <remote_name> :<branch_name>
+which was added in Git v1.5.0 "to delete a remote branch or a tag."
+
+Starting with Git v2.8.0, you can also use git push with the -d option as an alias for --delete. Therefore, the version of Git you have installed will dictate whether you need to use the easier or harder syntax.
+
+Delete Remote Branch [Original Answer from 5-Jan-2010]
+From Chapter 3 of Pro Git by Scott Chacon:
+
+Deleting Remote Branches
+Suppose you’re done with a remote branch — say, you and your collaborators are finished with a feature and have merged it into your remote’s main branch (or whatever branch your stable code-line is in). You can delete a remote branch using the rather obtuse syntax git push [remotename] :[branch]. If you want to delete your serverfix branch from the server, you run the following:
+
+$ git push origin :serverfix
+To git@github.com:schacon/simplegit.git
+ - [deleted]         serverfix
+ 
