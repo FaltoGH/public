@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ $# != 1 ]; then
+echo "usage: $0 <git repository name>"
+exit 1
+fi
+
+repo=$1
+
+git init --bare $1.git
+chown -R www-data $1.git
+pushd $1.git
+sudo -u www-data git config --local --add http.receivepack true
+popd
+
+echo end
+
